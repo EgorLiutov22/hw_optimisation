@@ -1,25 +1,17 @@
 import requests
-from collections import Counter
-
 
 def get_text(url):
     response = requests.get(url)
     return response.text
 
-
-def count_word_frequencies_optimized(url, words_to_count):
-
+def count_word_frequencies(url, word):
     text = get_text(url)
-
-    all_words = text.split()
-    word_counter = Counter(all_words)
-
-    frequencies = {}
-    for word in words_to_count:
-        frequencies[word] = word_counter.get(word, 0)
-
-    return frequencies
-
+    words = text.split()
+    count = 0
+    for w in words:
+        if w == word:
+            count += 1
+    return count
 
 def main():
     words_file = "words.txt"
@@ -32,10 +24,11 @@ def main():
             if word:
                 words_to_count.append(word)
 
-    frequencies = count_word_frequencies_optimized(url, words_to_count)
-
+    frequencies = {}
+    for word in words_to_count:
+        frequencies[word] = count_word_frequencies(url, word)
+    
     print(frequencies)
-
 
 if __name__ == "__main__":
     main()
